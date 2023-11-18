@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tickets-orders-pod
+  labels:
+    component: orders
+spec:
+  containers:
+    - name: tickets-orders
+      image: beyondnetperu/ticketsorders
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+        - containerPort: 3003
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-orders-nodeport
+spec:
+  type: NodePort
+  ports:
+    - port: 3053
+      targetPort: 3003
+      nodePort: 31518
+  selector:
+    component: orders

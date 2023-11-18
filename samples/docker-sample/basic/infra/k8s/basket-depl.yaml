@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tickets-basket-pod
+  labels:
+    component: basket
+spec:
+  containers:
+    - name: tickets-basket
+      image: beyondnetperu/ticketsbasket
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+        - containerPort: 3002
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-basket-nodeport
+spec:
+  type: NodePort
+  ports:
+    - port: 3052
+      targetPort: 3002
+      nodePort: 31517
+  selector:
+    component: basket

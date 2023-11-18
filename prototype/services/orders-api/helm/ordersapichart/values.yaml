@@ -1,0 +1,35 @@
+environment: Development
+version: '1.0'
+namespace: sandbox
+
+image:
+  repository: beyondnetperu/ordersapi
+  tag: '1.0'
+  pullPolicy: IfNotPresent
+  port: 3002
+
+imagePullSecret: ''
+nameOverride: 'orders-api'
+fullnameOverride: 'prototype-orders-api'
+
+service:
+  type: ClusterIP
+  port: 3002
+
+ingress:
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  class: nginx-orders-api
+  host: dev.orders-api.com
+  port: 80
+
+telemetry:
+  instrumentationKey: '123456'
+
+resources:
+  limits:
+    cpu: 50m
+    memory: 200Mi
+  requests:
+    cpu: 25m
+    memory: 100Mi

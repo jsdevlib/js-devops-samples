@@ -1,0 +1,13 @@
+bbdd: kubernetes
+pass: ipass
+usudb: usudb
+root: ipass
+namespace: sandbox
+limits:
+  memory: "200mi"
+  cpu: "2"
+requests:
+  memory: "100mi"
+  cpu: "0.5"
+version: 5.7
+environment: development

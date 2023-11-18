@@ -1,0 +1,60 @@
+version: "3.8"
+services:
+  todo-redis:
+    container_name: todo-redis
+    image: redis:5.0.3
+    ports:
+      - "6379:6379"
+    restart: always
+
+  todo-postgres:
+    container_name: todo-postgres
+    image: postgres:11.2
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: complexmono
+      POSTGRES_PASSWORD: complexmono123
+      POSTGRES_DB: complexmono
+
+  todo-api:
+    container_name: todo-api
+    image: beyondnetperu/todoapi
+    restart: always
+    environment:
+      POSTGRES_HOST: todo-postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: complexmono
+      POSTGRES_PASSWORD: complexmono123
+      POSTGRES_DB: complexmono
+      REDIS_HOST: todo-redis
+      REDIS_PORT: 6379
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules
+    depends_on:
+      - todo-postgres
+      - todo-redis
+
+  todo-view:
+    image: beyondnetperu/todoview
+    restart: always
+    ports:
+      - "4200:4200"
+    volumes:
+      - ${PWD}/todo-view:/app
+      - /app/node_modules
+    depends_on:
+      - todo-api
+
+  todo-proxy:
+    container_name: todo-proxy
+    image: beyondnetperu/todoproxy
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - todo-api
+      - todo-view
